@@ -1,7 +1,6 @@
 import 'package:jaspr/jaspr.dart';
 
 import 'provider.dart';
-import 'selector.dart';
 import 'single_child_stateless_component.dart';
 
 /// {@template provider.consumer}
@@ -151,7 +150,7 @@ import 'single_child_stateless_component.dart';
 /// ```
 ///
 /// See also:
-///   * [Selector], a [Consumer] that can filter updates.
+///   * Selector, a [Consumer] that can filter updates.
 /// {@endtemplate}
 class Consumer<T> extends SingleChildStatelessComponent {
   /// {@template provider.consumer.constructor}
