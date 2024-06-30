@@ -14,11 +14,11 @@ mixin _SingleChildComponentElementMixin on Element {
   _NestedHookElement? _parent;
 
   @override
-  void mount(Element? parent) {
+  void mount(Element? parent, Element? prevSibling) {
     if (parent is _NestedHookElement?) {
       _parent = parent;
     }
-    super.mount(parent);
+    super.mount(parent, prevSibling);
   }
 
   @override
@@ -48,8 +48,7 @@ class _NestedHook extends StatelessComponent {
   _NestedHookElement createElement() => _NestedHookElement(this);
 
   @override
-  Iterable<Component> build(BuildContext context) =>
-      throw StateError('handled internally');
+  Iterable<Component> build(BuildContext context) => throw StateError('handled internally');
 }
 
 /// A component that simplify the writing of deeply nested component trees.
@@ -134,8 +133,7 @@ class Nested extends StatelessComponent implements SingleChildComponent {
   _NestedElement createElement() => _NestedElement(this);
 }
 
-class _NestedElement extends StatelessElement
-    with _SingleChildComponentElementMixin {
+class _NestedElement extends StatelessElement with _SingleChildComponentElementMixin {
   _NestedElement(Nested component) : super(component);
 
   @override
@@ -188,10 +186,7 @@ class _NestedHookElement extends StatelessElement {
   Component? get injectedChild => _injectedChild;
   set injectedChild(Component? value) {
     final previous = _injectedChild;
-    if (value is _NestedHook &&
-        previous is _NestedHook &&
-        Component.canUpdate(
-            value.wrappedComponent, previous.wrappedComponent)) {
+    if (value is _NestedHook && previous is _NestedHook && Component.canUpdate(value.wrappedComponent, previous.wrappedComponent)) {
       // no need to rebuild the wrapped component just for a _NestedHook.
       // The component doesn't matter here, only its Element.
       return;
@@ -212,11 +207,11 @@ class _NestedHookElement extends StatelessElement {
   }
 
   @override
-  void mount(Element? parent) {
+  void mount(Element? parent, Element? prevSibling) {
     component.owner.nodes.add(this);
     _wrappedChild = component.wrappedComponent;
     _injectedChild = component.injectedChild;
-    super.mount(parent);
+    super.mount(parent, prevSibling);
   }
 
   @override
@@ -232,8 +227,7 @@ class _NestedHookElement extends StatelessElement {
 }
 
 /// A [StatefulComponent] that is compatible with [Nested].
-abstract class SingleChildStatefulComponent extends StatefulComponent
-    implements SingleChildComponent {
+abstract class SingleChildStatefulComponent extends StatefulComponent implements SingleChildComponent {
   /// Creates a component that has exactly one child component.
   const SingleChildStatefulComponent({Key? key, Component? child})
       : _child = child,
@@ -250,8 +244,7 @@ abstract class SingleChildStatefulComponent extends StatefulComponent
 /// A [State] for [SingleChildStatefulComponent].
 ///
 /// Do not override [build] and instead override [buildWithChild].
-abstract class SingleChildState<T extends SingleChildStatefulComponent>
-    extends State<T> {
+abstract class SingleChildState<T extends SingleChildStatefulComponent> extends State<T> {
   /// A [build] method that receives an extra `child` parameter.
   ///
   /// This method may be called with a `child` different from the parameter
@@ -261,24 +254,19 @@ abstract class SingleChildState<T extends SingleChildStatefulComponent>
   Iterable<Component> buildWithChild(BuildContext context, Component? child);
 
   @override
-  Iterable<Component> build(BuildContext context) =>
-      buildWithChild(context, component._child);
+  Iterable<Component> build(BuildContext context) => buildWithChild(context, component._child);
 }
 
 /// An [Element] that uses a [SingleChildStatefulComponent] as its configuration.
-class SingleChildStatefulElement extends StatefulElement
-    with _SingleChildComponentElementMixin {
+class SingleChildStatefulElement extends StatefulElement with _SingleChildComponentElementMixin {
   /// Creates an element that uses the given component as its configuration.
-  SingleChildStatefulElement(SingleChildStatefulComponent component)
-      : super(component);
+  SingleChildStatefulElement(SingleChildStatefulComponent component) : super(component);
 
   @override
-  SingleChildStatefulComponent get component =>
-      super.component as SingleChildStatefulComponent;
+  SingleChildStatefulComponent get component => super.component as SingleChildStatefulComponent;
 
   @override
-  SingleChildState<SingleChildStatefulComponent> get state =>
-      super.state as SingleChildState<SingleChildStatefulComponent>;
+  SingleChildState<SingleChildStatefulComponent> get state => super.state as SingleChildState<SingleChildStatefulComponent>;
 
   @override
   Iterable<Component> build() {
@@ -293,8 +281,7 @@ class SingleChildStatefulElement extends StatefulElement
 /// compatible with [Nested].
 ///
 /// Its [build] method must **not** be overriden. Instead use [buildWithChild].
-abstract class SingleChildStatelessComponent extends StatelessComponent
-    implements SingleChildComponent {
+abstract class SingleChildStatelessComponent extends StatelessComponent implements SingleChildComponent {
   /// Creates a component that has exactly one child component.
   const SingleChildStatelessComponent({Key? key, Component? child})
       : _child = child,
@@ -311,8 +298,7 @@ abstract class SingleChildStatelessComponent extends StatelessComponent
   Iterable<Component> buildWithChild(BuildContext context, Component? child);
 
   @override
-  Iterable<Component> build(BuildContext context) =>
-      buildWithChild(context, _child);
+  Iterable<Component> build(BuildContext context) => buildWithChild(context, _child);
 
   @override
   SingleChildStatelessElement createElement() {
@@ -321,11 +307,9 @@ abstract class SingleChildStatelessComponent extends StatelessComponent
 }
 
 /// An [Element] that uses a [SingleChildStatelessComponent] as its configuration.
-class SingleChildStatelessElement extends StatelessElement
-    with _SingleChildComponentElementMixin {
+class SingleChildStatelessElement extends StatelessElement with _SingleChildComponentElementMixin {
   /// Creates an element that uses the given component as its configuration.
-  SingleChildStatelessElement(SingleChildStatelessComponent component)
-      : super(component);
+  SingleChildStatelessElement(SingleChildStatelessComponent component) : super(component);
 
   @override
   Iterable<Component> build() {
@@ -336,6 +320,5 @@ class SingleChildStatelessElement extends StatelessElement
   }
 
   @override
-  SingleChildStatelessComponent get component =>
-      super.component as SingleChildStatelessComponent;
+  SingleChildStatelessComponent get component => super.component as SingleChildStatelessComponent;
 }
