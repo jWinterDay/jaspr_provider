@@ -7,7 +7,7 @@ export 'src/consumer.dart' show Consumer, Consumer2, Consumer3, Consumer4, Consu
 export 'src/provider.dart'
     show
         DeferredInheritedProvider,
-        InheritedContext,
+        // InheritedContext,
         InheritedProvider,
         MultiProvider,
         Provider,

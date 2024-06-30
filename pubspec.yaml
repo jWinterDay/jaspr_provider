@@ -1,6 +1,6 @@
 name: jaspr_provider
 description: A wrapper around InheritedComponent to make them easier to use and more reusable.
-version: 0.0.3
+version: 1.0.3
 repository: https://github.com/Maksimka101/jaspr_provider
 
 environment:
