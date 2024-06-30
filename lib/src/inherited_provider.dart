@@ -296,36 +296,36 @@ extension SelectContext on BuildContext {
 //   bool get hasValue;
 // }
 
-extension InheritedContext on BuildContext {
-  /// The current value exposed by [InheritedProvider].
-  ///
-  /// This property is lazy loaded, and reading it the first time may trigger
-  /// some side-effects such as creating a [T] instance or starting
-  /// a subscription.
-  // T get value;
+// extension InheritedContext on BuildContext {
+/// The current value exposed by [InheritedProvider].
+///
+/// This property is lazy loaded, and reading it the first time may trigger
+/// some side-effects such as creating a [T] instance or starting
+/// a subscription.
+// T get value;
 
-  // /// Marks the [InheritedProvider] as needing to update dependents.
-  // ///
-  // /// This bypass [InheritedComponent.updateShouldNotify] and will force components
-  // /// that depends on [T] to rebuild.
-  // void markNeedsNotifyDependents();
+// /// Marks the [InheritedProvider] as needing to update dependents.
+// ///
+// /// This bypass [InheritedComponent.updateShouldNotify] and will force components
+// /// that depends on [T] to rebuild.
+// void markNeedsNotifyDependents();
 
-  // /// Whether `setState` was called at least once or not.
-  // ///
-  // /// It can be used by [DeferredStartListening] to differentiate between the
-  // /// very first listening, and a rebuild after `controller` changed.
-  // bool get hasValue;
+// /// Whether `setState` was called at least once or not.
+// ///
+// /// It can be used by [DeferredStartListening] to differentiate between the
+// /// very first listening, and a rebuild after `controller` changed.
+// bool get hasValue;
 
-  // @override
-  // void markNeedsNotifyDependents() {
-  //   if (!_isNotifyDependentsEnabled) {
-  //     return;
-  //   }
+// @override
+// void markNeedsNotifyDependents() {
+//   if (!_isNotifyDependentsEnabled) {
+//     return;
+//   }
 
-  //   markNeedsBuild();
-  //   _shouldNotifyDependents = true;
-  // }
-}
+//   markNeedsBuild();
+//   _shouldNotifyDependents = true;
+// }
+// }
 
 class _InheritedProviderScope<T> extends InheritedComponent {
   const _InheritedProviderScope({
